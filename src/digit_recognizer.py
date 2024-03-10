@@ -76,3 +76,36 @@ class DigitRecognizer(object):
             ),
         )
         return resized_image
+
+    def load_preprocess_image(self, image_file_path: str) -> np.ndarray:
+        """Loads & preprocesses image based on model requirements.
+
+        Loads & preprocesses image based on model requirements.
+
+        Args:
+            image_file_path: A string for the location of the image.
+
+        Returns: A NumPy array for the fully processed version of the image.
+        """
+        # Asserts type & value of the arguments.
+        assert isinstance(
+            image_file_path, str
+        ), "Variable image_file_path should be of type 'str'."
+
+        # Loads the image for the current image path.
+        image = cv2.imread(image_file_path)
+
+        # Gray scales image.
+        gray_scale_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+        # Resizes image to (final_image_height, final_image_width, n_channels).
+        model_input_image = self.resize_image(gray_scale_image)
+
+        # Casts input image to float32 and normalizes the image from [0, 255] range to [0, 1] range.
+        model_input_image = model_input_image.astype(np.float32)
+        model_input_image = model_input_image / 255.0
+
+        # Adds extra dimension in axis 0 & 3.
+        model_input_image = np.expand_dims(model_input_image, axis=0)
+        model_input_image = np.expand_dims(model_input_image, axis=3)
+        return model_input_image
