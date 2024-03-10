@@ -1,6 +1,6 @@
-from PIL import Image
 import io
 
+from PIL import Image
 from flask import Flask, redirect, send_from_directory, request, render_template
 
 from src.digit_recognizer import DigitRecognizer
