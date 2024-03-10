@@ -73,6 +73,9 @@ def upload() -> str:
             "{}/v1/models/digit_recognizer_v1.0.0:predict".format(models_base_url),
         )
 
+        # Loads the model configuration file for current version.
+        digit_recognition.load_model_configuration()
+
         # Loads & preprocesses image based on model requirements. Predicts digit recognized from image.
         output = digit_recognition.predict_digit("data/in/temp.png")
 
@@ -90,3 +93,10 @@ def upload() -> str:
     # Else, renders the upload template.
     else:
         return render_template("upload.html")
+
+
+if __name__ == "__main__":
+    print()
+
+    # Runs app on specified host & port.
+    app.run(debug=False)
