@@ -14,3 +14,10 @@ This repository contains UI & API code used in the Digit Recognizer project.
 - [Digit Recognizer v2 (Training)](https://github.com/preetham-ganesh/digit-recognizer-v2-training)
 
 - [Digit Recognizer v2 (Serving)](https://github.com/preetham-ganesh/digit-recognizer-v2-serving)
+
+## Installation
+
+```bash
+git clone https://github.com/preetham-ganesh/digit-recognizer-v2-app
+cd digit-recognizer-v2-app
+```
