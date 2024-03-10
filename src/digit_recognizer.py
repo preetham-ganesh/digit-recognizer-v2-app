@@ -1,8 +1,13 @@
 import os
+import json
+
 import numpy as np
 import cv2
+import requests
 
 from src.utils import load_json_file
+
+from typing import Dict, Any
 
 
 class DigitRecognizer(object):
@@ -109,3 +114,50 @@ class DigitRecognizer(object):
         model_input_image = np.expand_dims(model_input_image, axis=0)
         model_input_image = np.expand_dims(model_input_image, axis=3)
         return model_input_image
+
+    def predict_digit(self, image_file_path: str) -> Dict[str, Any]:
+        """Loads & preprocesses image based on model requirements. Predicts digit recognized from image.
+
+        Loads & preprocesses image based on model requirements. Predicts digit recognized from image.
+
+        Args:
+            image_file_path: A string for the location of the image file path.
+
+        Returns:
+            A dictionary for status of the prediction, along with predicted digit & prediction's confidence score.
+        """
+        # Asserts type & value of the arguments.
+        assert isinstance(
+            image_file_path, str
+        ), "Variable image_file_path should be of type 'str'."
+
+        # Loads & preprocesses image based on model requirements.
+        model_input_image = self.load_preprocess_image(image_file_path)
+
+        # Sends model input image as input to Model using URL.
+        try:
+            response = requests.post(
+                self.model_api_url,
+                data=json.dumps({"inputs": model_input_image.tolist()}),
+                headers={"content-type": "application/json"},
+            )
+        except requests.exceptions.ConnectionError:
+            return {
+                "status": "Failure",
+                "message": "Serving URL does not exist. Received 'requests.exceptions.ConnectionError' error.",
+            }
+
+        # If status is 200, then extracts the prediction from the response.
+        if response.status_code == 200:
+            prediction = np.array(
+                json.loads(response.text)["outputs"], dtype=np.float32
+            )
+
+            # Computes the digit predicted by the model, & extracts the confidence score.
+            predicted_digit = int(np.argmax(prediction[0]))
+            score = float(prediction[0][predicted_digit])
+            return {"status": "Success", "digit": predicted_digit, "score": score}
+
+        # Else returns the text from response.
+        else:
+            return {"status": "Failure", "message": response.text}
