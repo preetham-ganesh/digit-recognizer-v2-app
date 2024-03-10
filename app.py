@@ -1,8 +1,21 @@
-from flask import Flask, redirect
+from flask import Flask, redirect, send_from_directory
 
 
 # Creates a flask application.
 app = Flask(__name__)
+
+
+@app.route("/send_image/")
+def send_image():
+    """Sends saved image from the directory using the filename.
+
+    Args:
+        None.
+
+    Returns:
+        A file based on the directory path & the file name.
+    """
+    return send_from_directory("data/in", "temp.png")
 
 
 @app.route("/")
