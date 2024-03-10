@@ -14,8 +14,14 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && pip install --no-cache-dir -r requirements.txt
 
-# Exposes port $PORT for container communication
+# Exposes port $PORT for container communication (for local deployment)
+# EXPOSE 3000
+
+# Run the Python script app.py with Gunicorn as the WSGI server (for Heroku deployment).
+# CMD ["python3", "/app/app.py"]
+
+# Exposes port $PORT for container communication (for Heroku deployment)
 EXPOSE $PORT
 
-# Run the Python script app.py with Gunicorn as the WSGI server.
+# Run the Python script app.py with Gunicorn as the WSGI server (for Heroku deployment).
 CMD gunicorn --workers=1 --bind 0.0.0.0:$PORT app:app

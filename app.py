@@ -97,5 +97,8 @@ def upload() -> str:
 if __name__ == "__main__":
     print()
 
-    # Runs app on specified host & port.
+    # Runs app on specified host & port (For local deployment)
+    # app.run(host="0.0.0.0", port=3030, debug=False)
+
+    # Runs app on non debug mode (For Heroku Deployment).
     app.run(debug=False)
