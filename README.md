@@ -36,3 +36,11 @@ Use the following code snippet to deploy the docker container locally:
 docker build -t digit-recognizer-v2-app .
 docker run -p 3000:3000 digit-recognizer-v2-app
 ```
+
+## Releases
+
+Details about the latest releases, including key features, bug fixes, and any other relevant information.
+
+| Version | Release Date | Size     | Release Notes                               |
+| ------- | ------------ | -------- | ------------------------------------------- |
+| v1.0.0  | 03-10-2024   | 0.667 GB | Released Digit Recognizer UI & API (v1.0.0) |
