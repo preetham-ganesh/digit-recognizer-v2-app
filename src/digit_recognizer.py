@@ -1,4 +1,6 @@
 import os
+import numpy as np
+import cv2
 
 from src.utils import load_json_file
 
@@ -48,3 +50,29 @@ class DigitRecognizer(object):
         self.model_configuration = load_json_file(
             "v{}".format(self.model_version), model_configuration_directory_path
         )
+
+    def resize_image(self, image: np.ndarray) -> np.ndarray:
+        """Resizes image based on final image height & width.
+
+        Resizes image to (final_image_height, final_image_width, n_channels) shape.
+
+        Args:
+            image: A NumPy array for the input image.
+
+        Returns:
+            A NumPy array for the resized version of the input image.
+        """
+        # Checks type & values of arguments.
+        assert isinstance(
+            image, np.ndarray
+        ), "Variable image should be of type 'np.ndarray'."
+
+        # Resizes image based on final image height & width.
+        resized_image = cv2.resize(
+            image,
+            (
+                self.model_configuration["model"]["final_image_width"],
+                self.model_configuration["model"]["final_image_height"],
+            ),
+        )
+        return resized_image
